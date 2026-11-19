@@ -124,3 +124,4 @@ make test
 SupoClip is released under the [AGPL-3.0 License](LICENSE).
 
 Contributions are accepted under the terms in [CONTRIBUTING.md](CONTRIBUTING.md), including a license grant that allows the project owner to sublicense and relicense contributed code.
+"# HypoClip" 
