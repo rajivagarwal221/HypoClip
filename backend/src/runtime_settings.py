@@ -17,6 +17,7 @@ RUNTIME_SETTING_KEYS: tuple[str, ...] = (
     "LLM",
     "OPENAI_API_KEY",
     "OPENROUTER_API_KEY",
+    "GROQ_API_KEY",
     "GOOGLE_API_KEY",
     "ANTHROPIC_API_KEY",
     "OLLAMA_BASE_URL",
@@ -30,6 +31,7 @@ PROCESS_ENV_SETTING_KEYS = frozenset(
     {
         "OPENAI_API_KEY",
         "OPENROUTER_API_KEY",
+        "GROQ_API_KEY",
         "GOOGLE_API_KEY",
         "ANTHROPIC_API_KEY",
         "OLLAMA_BASE_URL",

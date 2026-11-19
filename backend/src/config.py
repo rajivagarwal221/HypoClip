@@ -16,6 +16,8 @@ class Config:
         self.openai_api_key = self._get_runtime_setting("OPENAI_API_KEY")
         self.openrouter_api_key = self._get_runtime_setting("OPENROUTER_API_KEY")
         self.openrouter_fallback_model = self._get_optional_env("OPENROUTER_FALLBACK_MODEL") or "openai/gpt-6-luna"
+        self.groq_api_key = self._get_runtime_setting("GROQ_API_KEY")
+        self.groq_max_tokens = max(256, min(4096, int(os.getenv("GROQ_MAX_TOKENS", "2048"))))
         self.anthropic_api_key = self._get_runtime_setting("ANTHROPIC_API_KEY")
         self.google_api_key = self._get_runtime_setting("GOOGLE_API_KEY")
         self.youtube_data_api_key = self._get_runtime_setting("YOUTUBE_DATA_API_KEY")
@@ -504,6 +506,8 @@ class Config:
             return "anthropic:claude-4-sonnet"
         if self.openrouter_api_key:
             return "openrouter:anthropic/claude-sonnet-5.5"
+        if self.groq_api_key:
+            return "groq:openai/gpt-oss-20b"
         return "google-gla:gemini-3-flash-preview"
 
 

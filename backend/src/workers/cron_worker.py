@@ -29,6 +29,7 @@ from ..config import Config  # noqa: E402
 from ..observability import configure_logging  # noqa: E402
 from .media_cleanup import cleanup_media, copy_pending_uploads, sweep_orphaned_media  # noqa: E402
 from .media_replication import check_media_storage, replicate_pending_media  # noqa: E402
+from ..live.publish import retry_live_uploads  # noqa: E402
 from .tasks import (  # noqa: E402
     dispatch_scheduled_social_posts,
     refresh_social_metrics,
@@ -71,4 +72,5 @@ class CronWorkerSettings:
         scheduled(copy_pending_uploads, second=10, run_at_startup=True, timeout=1800),
         scheduled(dispatch_scheduled_social_posts, second=0, timeout=300),
         scheduled(refresh_social_metrics, minute=7, second=0, timeout=1800),
+        scheduled(retry_live_uploads, second=30, timeout=120),
     ]

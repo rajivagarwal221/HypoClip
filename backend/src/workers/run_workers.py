@@ -19,6 +19,7 @@ import sys
 
 VIDEO_WORKER = "src.workers.tasks.WorkerSettings"
 CRON_WORKER = "src.workers.cron_worker.CronWorkerSettings"
+LIVE_WORKER = "src.live.capture.LiveWorkerSettings"
 
 
 def embed_cron_worker(value: str | None = None) -> bool:
@@ -27,7 +28,7 @@ def embed_cron_worker(value: str | None = None) -> bool:
 
 
 def worker_settings(embed_cron: bool | None = None) -> list[str]:
-    settings = [VIDEO_WORKER]
+    settings = [VIDEO_WORKER, LIVE_WORKER]
     if embed_cron_worker() if embed_cron is None else embed_cron:
         settings.append(CRON_WORKER)
     return settings

@@ -259,6 +259,32 @@ class Task(Base):
     )
 
 
+class LiveSession(Base):
+    __tablename__ = "live_sessions"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid_string)
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    platform: Mapped[str] = mapped_column(String(20), nullable=False)
+    url: Mapped[str] = mapped_column(String(1000), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, server_default=sql_text("'queued'"))
+    stop_requested: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=sql_text("false"))
+    chat_counts: Mapped[dict] = mapped_column(JSONB, nullable=False, server_default=sql_text("'{}'::jsonb"))
+    task_ids: Mapped[list] = mapped_column(JSONB, nullable=False, server_default=sql_text("'[]'::jsonb"))
+    youtube_account_id: Mapped[Optional[str]] = mapped_column(String(36))
+    processed_until_seconds: Mapped[int] = mapped_column(Integer, nullable=False, server_default=sql_text("0"))
+    task_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("tasks.id", ondelete="SET NULL"))
+    error_message: Mapped[Optional[str]] = mapped_column(String(500))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    started_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+
+    __table_args__ = (
+        CheckConstraint("platform IN ('twitch', 'youtube', 'kick')", name="live_sessions_platform_check"),
+        CheckConstraint("status IN ('queued', 'recording', 'processing', 'completed', 'stopped', 'error')", name="live_sessions_status_check"),
+        Index("idx_live_sessions_user_created", "user_id", "created_at"),
+    )
+
+
 class Source(Base):
     __tablename__ = "sources"
 

@@ -134,6 +134,9 @@ async def process_video_task(
                 clip_index: int, total_clips: int, clip_data: dict
             ):
                 await progress.clip_ready(clip_index, total_clips, clip_data)
+                from ..live.publish import publish_ready_clip
+
+                await publish_ready_clip(task_id, clip_data["id"])
 
             # Process the video
             result = await run_trial_job(

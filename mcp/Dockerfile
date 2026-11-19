@@ -5,7 +5,9 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 \
     UV_SYSTEM_PYTHON=1
 
-RUN apt-get update \
+RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null; \
+    sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.list 2>/dev/null; \
+    apt-get update \
     && apt-get install -y --no-install-recommends curl ca-certificates \
     && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && apt-get purge -y --auto-remove curl \

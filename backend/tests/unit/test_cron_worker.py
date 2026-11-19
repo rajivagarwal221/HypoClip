@@ -6,7 +6,7 @@ from arq.connections import RedisSettings
 from arq.constants import job_key_prefix
 
 from src.workers.cron_worker import CRON_QUEUE_NAME, CronWorkerSettings
-from src.workers.run_workers import CRON_WORKER, VIDEO_WORKER, embed_cron_worker, worker_settings
+from src.workers.run_workers import CRON_WORKER, LIVE_WORKER, VIDEO_WORKER, embed_cron_worker, worker_settings
 from src.workers.tasks import WorkerSettings
 
 
@@ -16,7 +16,7 @@ def test_cron_jobs_are_not_on_the_video_worker():
     assert CronWorkerSettings.queue_name == CRON_QUEUE_NAME
     assert CronWorkerSettings.queue_name != WorkerSettings.queue_name
     jobs = CronWorkerSettings.cron_jobs
-    assert len(jobs) == 7
+    assert len(jobs) == 8
     assert [job.job_id for job in jobs] == [job.name for job in jobs]
     assert {job.job_id for job in jobs} == {
         "cron:check_media_storage",
@@ -26,6 +26,7 @@ def test_cron_jobs_are_not_on_the_video_worker():
         "cron:copy_pending_uploads",
         "cron:dispatch_scheduled_social_posts",
         "cron:refresh_social_metrics",
+        "cron:retry_live_uploads",
     }
     for job in jobs:
         assert job.job_id.count(":") == 1
@@ -36,8 +37,8 @@ def test_the_worker_process_embeds_cron_unless_asked_not_to():
     assert embed_cron_worker("0") is False
     assert embed_cron_worker("false") is False
     assert embed_cron_worker("1") is True
-    assert worker_settings(False) == [VIDEO_WORKER]
-    assert worker_settings(True) == [VIDEO_WORKER, CRON_WORKER]
+    assert worker_settings(False) == [VIDEO_WORKER, LIVE_WORKER]
+    assert worker_settings(True) == [VIDEO_WORKER, LIVE_WORKER, CRON_WORKER]
 
 
 @pytest.mark.asyncio

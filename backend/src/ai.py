@@ -17,11 +17,13 @@ from pydantic_ai.models import Model
 from pydantic_ai.models.anthropic import AnthropicModel
 from pydantic_ai.models.ollama import OllamaModel
 from pydantic_ai.models.openrouter import OpenRouterModel
+from pydantic_ai.models.groq import GroqModel
 from pydantic_ai.profiles.openai import OpenAIModelProfile
 from pydantic_ai.profiles.anthropic import AnthropicModelProfile
 from pydantic_ai.providers.anthropic import AnthropicProvider
 from pydantic_ai.providers.ollama import OllamaProvider
 from pydantic_ai.providers.openrouter import OpenRouterProvider
+from pydantic_ai.providers.groq import GroqProvider
 from pydantic import AliasChoices, BaseModel, Field, field_validator
 
 from .config import Config, get_config
@@ -439,7 +441,7 @@ def build_transcript_system_prompt(clip_length: str = "auto") -> str:
 _transcript_agent: Optional[Agent[None, TranscriptAnalysis]] = None
 _transcript_agent_signature: Optional[tuple[str | None, ...]] = None
 
-SUPPORTED_LLM_PROVIDERS = {"google", "google-gla", "openai", "openrouter", "anthropic", "ollama"}
+SUPPORTED_LLM_PROVIDERS = {"google", "google-gla", "openai", "openrouter", "groq", "anthropic", "ollama"}
 
 
 def _split_llm_name(model_name: str) -> tuple[str, str | None]:
@@ -457,7 +459,7 @@ def _get_missing_llm_key_error(model_name: str, runtime_config: Config) -> Optio
     if provider not in SUPPORTED_LLM_PROVIDERS:
         return (
             f"Unsupported LLM provider '{provider}'. "
-            "Use google-gla:*, openai:*, openrouter:*, anthropic:*, or ollama:*."
+            "Use google-gla:*, openai:*, openrouter:*, groq:*, anthropic:*, or ollama:*."
         )
 
     if not provider_model_name:
@@ -477,6 +479,9 @@ def _get_missing_llm_key_error(model_name: str, runtime_config: Config) -> Optio
 
     if provider == "openrouter" and "/" not in provider_model_name:
         return "OpenRouter model must include its vendor, for example openrouter:anthropic/claude-sonnet-5.5."
+
+    if provider == "groq" and not runtime_config.groq_api_key:
+        return "Selected LLM provider is Groq, but GROQ_API_KEY is not set."
 
     if provider == "openai" and not runtime_config.openai_api_key:
         return (
@@ -541,6 +546,14 @@ def _build_transcript_model(
                 "openrouter_reasoning": {"effort": "low"},
                 "max_tokens": 8192,
             },
+        )
+    if provider == "groq":
+        if not provider_model_name:
+            raise RuntimeError("Selected LLM provider is Groq, but no model name was provided.")
+        return GroqModel(
+            provider_model_name,
+            provider=GroqProvider(api_key=runtime_config.groq_api_key),
+            settings={"max_tokens": runtime_config.groq_max_tokens},
         )
     if provider != "ollama":
         return model_name

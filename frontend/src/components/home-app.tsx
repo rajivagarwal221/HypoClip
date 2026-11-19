@@ -902,6 +902,7 @@ export default function HomeApp() {
             </section>
           )}
 
+          <p className="mt-4 text-sm text-muted-foreground">Broadcasting right now? <Link href="/live" className="underline">Clip a live stream</Link></p>
           <form
             noValidate
             onSubmit={handleSubmit}

@@ -16,7 +16,10 @@ FROM base AS deps
 WORKDIR /app
 
 # Install OpenSSL for Prisma postinstall
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN echo 'Acquire::http::Timeout "300";\nAcquire::https::Timeout "300";\nAcquire::Retries "10";' > /etc/apt/apt.conf.d/99network && \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true; \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list 2>/dev/null || true; \
+    apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency manifests only so app/schema changes don't invalidate deps
 COPY frontend/package.json frontend/pnpm-lock.yaml ./
@@ -28,7 +31,10 @@ FROM base AS development
 WORKDIR /app
 
 # Install OpenSSL (required for Prisma) and curl for healthchecks
-RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
+RUN echo 'Acquire::http::Timeout "300";\nAcquire::https::Timeout "300";\nAcquire::Retries "10";' > /etc/apt/apt.conf.d/99network && \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true; \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list 2>/dev/null || true; \
+    apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
@@ -57,7 +63,10 @@ WORKDIR /app
 
 # Install OpenSSL (required for Prisma)
 # ca-certificates: the PostHog CLI (source map upload) needs system roots for TLS.
-RUN apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN echo 'Acquire::http::Timeout "300";\nAcquire::https::Timeout "300";\nAcquire::Retries "10";' > /etc/apt/apt.conf.d/99network && \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true; \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list 2>/dev/null || true; \
+    apt-get update && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/ .
@@ -123,7 +132,10 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install OpenSSL (required for Prisma) and curl for healthchecks
-RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
+RUN echo 'Acquire::http::Timeout "300";\nAcquire::https::Timeout "300";\nAcquire::Retries "10";' > /etc/apt/apt.conf.d/99network && \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true; \
+    sed -i 's|deb.debian.org|ftp.in.debian.org|g' /etc/apt/sources.list 2>/dev/null || true; \
+    apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user
 RUN groupadd --system --gid 1001 nodejs

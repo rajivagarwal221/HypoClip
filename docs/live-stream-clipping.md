@@ -1,0 +1,11 @@
+# Live stream clipping
+
+Open `/live`, paste a public Twitch or Kick channel URL or a YouTube live video URL, choose a connected YouTube account, and start while the broadcast is active. SupoClip records up to `MAX_VIDEO_DURATION` seconds or `MAX_VIDEO_UPLOAD_BYTES`, whichever is reached first. It processes five-minute windows while the broadcast continues, shows every highlight task on the live page, and queues each generated clip for **public** YouTube upload as soon as it is ready. Stopping capture still processes the remaining usable video.
+
+The backend worker command `python -m src.workers.run_workers` now starts a dedicated live queue in addition to video and cron workers. Install the updated backend lockfile with `uv sync` in the deployment checkout and restart both backend and worker. Streamlink and FFmpeg are required on the worker host. `streamlink` is in `pyproject.toml`; FFmpeg is already required by the video pipeline.
+
+Public auto-upload uses the existing YouTube OAuth publisher. Configure `YOUTUBE_OAUTH_CLIENT_ID`, `YOUTUBE_OAUTH_CLIENT_SECRET`, and `SOCIAL_OAUTH_REDIRECT_BASE_URL`, enable social publishing for the account, and connect the desired YouTube channel in Social settings before starting a live session. The publish queue retries provider failures using its existing retry rules; the live retry job rechecks clips whose post could not be queued initially.
+
+Chat counts are an optional ranking signal. Twitch can read IRC chat when `TWITCH_CHAT_USERNAME` and `TWITCH_CHAT_TOKEN` (a user token permitted to read chat) are set. YouTube can poll live chat when `YOUTUBE_DATA_API_KEY` is set and the broadcast exposes chat. Kick uses transcript ranking because a stable supported chat API is not configured here. Message bodies and author identities are discarded; only ten-second counts are stored. If chat fails or has no messages, the existing transcript-based highlight selection runs normally.
+
+For self-hosting, keep the API and live worker on a shared `temp_dir` volume. A live worker holds one recording job at a time, so additional sessions wait in its queue. The dashboard polls status every ten seconds. The media and AI costs are the same type as an uploaded video; recording requires local disk proportional to stream length, including a temporary transport-stream copy until finalization.
