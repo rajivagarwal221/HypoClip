@@ -53,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
   publisher: COMPANY_NAME,
   category: t("category"),
   icons: {
-    icon: "/icon.png",
+    icon: "/icon.svg",
   },
   itunes: {
     appId: APP_STORE_ID,

@@ -62,9 +62,9 @@ export default function LivePage() {
   }
 
   return <main className="mx-auto max-w-2xl px-4 py-12">
-    <Link href="/" className="text-sm underline">← Back to SupoClip</Link>
+    <Link href="/" className="text-sm underline">← Back to HypoClips</Link>
     <h1 className="mt-8 text-3xl font-semibold">Clip a live stream</h1>
-    <p className="mt-3 text-sm text-muted-foreground">Paste a live Twitch channel, YouTube live video, or Kick channel. SupoClip selects and renders highlights while the broadcast continues, then uploads each ready clip as a public YouTube Short.</p>
+    <p className="mt-3 text-sm text-muted-foreground">Paste a live Twitch channel, YouTube live video, or Kick channel. HypoClips selects and renders highlights while the broadcast continues, then uploads each ready clip as a public YouTube Short.</p>
     <form onSubmit={submit} className="mt-8 flex flex-col gap-3">
       <input type="url" required value={url} onChange={event => setUrl(event.target.value)} placeholder="https://www.twitch.tv/channel" aria-label="Live-stream URL" className="min-w-0 flex-1 rounded-lg border bg-background px-4 py-3" />
       {accounts.length ? <label className="text-sm">Publish public Shorts to

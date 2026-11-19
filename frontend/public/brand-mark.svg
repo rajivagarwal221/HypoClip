@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HypoClips">
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1b1b" />
+      <stop offset="1" stop-color="#050505" />
+    </linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b4ff5a" />
+      <stop offset="1" stop-color="#7fff00" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#surface)" />
+  <path d="M15 14h10v13h14V14h10v36H39V36H25v14H15V14Z" fill="url(#lime)" />
+</svg>

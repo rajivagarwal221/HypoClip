@@ -57,7 +57,12 @@ class Word(Model):
 class CaptionStyle(Model):
     enabled: bool = True
     font: Literal[
-        "TikTokSans-Regular", "TikTokSans-Bold", "Poppins-ExtraBold", "THEBOLDFONT"
+        "TikTokSans-Regular", "TikTokSans-Bold", "Poppins-ExtraBold", "THEBOLDFONT",
+        "Anton-Regular", "ArchivoBlack-Regular", "Bangers-Regular",
+        "BarlowCondensed-Bold", "BebasNeue-Regular", "DMSans", "Inter",
+        "LeagueSpartan", "Montserrat-Variable-wght", "NunitoSans", "OpenSans",
+        "Oswald-Variable-wght", "Raleway-Variable-wght", "Roboto", "Rubik",
+        "Sora", "Urbanist", "WorkSans",
     ] = "Poppins-ExtraBold"
     # 1080-wide units; 132 matches the generation renderer's largest caption.
     size: int = Field(default=54, ge=20, le=132)

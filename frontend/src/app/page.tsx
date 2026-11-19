@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description: t("metadata.openGraphDescription"),
       url: siteUrl,
-      siteName: "SupoClip",
+      siteName: "HypoClips",
       type: "website",
     },
     twitter: {
@@ -47,16 +47,16 @@ export default async function HomePage() {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "SupoClip",
+      name: "HypoClips",
       legalName: COMPANY_NAME,
       url: siteUrl,
-      logo: `${siteUrl}/logo.png`,
+      logo: `${siteUrl}/brand-mark.svg`,
       sameAs: ["https://github.com/FujiwaraChoki/supoclip", APP_STORE_URL],
     },
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      name: "SupoClip",
+      name: "HypoClips",
       applicationCategory: "MultimediaApplication",
       operatingSystem: "Web, Docker",
       url: siteUrl,
@@ -78,7 +78,7 @@ export default async function HomePage() {
     {
       "@context": "https://schema.org",
       "@type": "MobileApplication",
-      name: "SupoClip",
+      name: "HypoClips",
       applicationCategory: "MultimediaApplication",
       operatingSystem: "iOS",
       url: APP_STORE_URL,
@@ -93,7 +93,7 @@ export default async function HomePage() {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "SupoClip",
+      name: "HypoClips",
       url: siteUrl,
       description: t("metadata.structured.website"),
     },

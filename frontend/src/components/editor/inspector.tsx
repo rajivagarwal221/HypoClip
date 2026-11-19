@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import {
   AlignCenter,
@@ -146,6 +146,22 @@ export function Inspector({
   const scriptWords = useRef(doc.words);
   const [script, setScript] = useState<string | null>(null),
     [applying, setApplying] = useState(false);
+  const [fonts, setFonts] = useState<{ name: string; display_name: string }[]>([]);
+  const [fontError, setFontError] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/fonts", { cache: "no-store", signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Fonts: ${response.status}`);
+        return response.json();
+      })
+      .then((data: { fonts?: { name: string; display_name: string; scope: string }[] }) => {
+        setFonts((data.fonts ?? []).filter((font) => font.scope === "system"));
+        setFontError(false);
+      })
+      .catch(() => { if (!controller.signal.aborted) setFontError(true); });
+    return () => controller.abort();
+  }, []);
   const caption = (change: Partial<CaptionStyle>, group = "caption-style") =>
     update((d) => ({ ...d, captions: { ...d.captions, ...change } }), group);
   return (
@@ -235,14 +251,18 @@ export function Inspector({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="TikTokSans-Regular">TikTok Sans</SelectItem>
-                    <SelectItem value="TikTokSans-Bold">TikTok Sans Bold</SelectItem>
-                    <SelectItem value="Poppins-ExtraBold">
-                      Poppins Extra Bold
-                    </SelectItem>
-                    <SelectItem value="THEBOLDFONT">The Bold Font</SelectItem>
+                    {(fonts.length ? fonts : [
+                      { name: "TikTokSans-Regular", display_name: "TikTok Sans" },
+                      { name: "TikTokSans-Bold", display_name: "TikTok Sans Bold" },
+                      { name: "Poppins-ExtraBold", display_name: "Poppins Extra Bold" },
+                      { name: "THEBOLDFONT", display_name: "The Bold Font" },
+                    ]).map((font) => <SelectItem key={font.name} value={font.name}>{font.display_name}</SelectItem>)}
+                    {!fonts.some((font) => font.name === doc.captions.font) &&
+                      !["TikTokSans-Regular", "TikTokSans-Bold", "Poppins-ExtraBold", "THEBOLDFONT"].includes(doc.captions.font) &&
+                      <SelectItem value={doc.captions.font}>{doc.captions.font}</SelectItem>}
                   </SelectContent>
                 </Select>
+                {fontError && <p className="mt-1 text-xs text-destructive">Could not load the full font list. Check that the backend is running.</p>}
               </Field>
               <Range
                 label={t("captions.size")}

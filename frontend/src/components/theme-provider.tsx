@@ -4,14 +4,12 @@ import { usePathname } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { createContext, useContext, useEffect, useState } from "react";
 
-// Routes that only exist inside the signed-in app. They use the saved theme
-// from the first paint. Everything else (landing, marketing, auth, share
-// pages) has no dark design and stays light.
+// Keep the HypoClips dark palette across public and signed-in pages.
 const APP_ROUTE = /^\/(list|tasks|settings|analytics|admin)(\/|$)/;
 
 const AppThemeScope = createContext<(active: boolean) => void>(() => {});
 
-/** Light by default; the saved dark choice only applies inside the app. */
+/** Dark by default across the application. */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
   const [shellActive, setShellActive] = useState(false);
@@ -21,9 +19,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <AppThemeScope.Provider value={setShellActive}>
       <NextThemesProvider
         attribute="class"
-        defaultTheme="light"
+        defaultTheme="dark"
         enableSystem={false}
-        forcedTheme={themed ? undefined : "light"}
+        forcedTheme={themed ? undefined : "dark"}
         disableTransitionOnChange
       >
         {children}
