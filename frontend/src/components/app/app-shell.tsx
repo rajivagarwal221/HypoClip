@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -25,6 +24,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Kbd } from "@/components/ui/kbd";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/brand-mark";
+import { SITE_NAME } from "@/lib/site";
 
 // `mobile: false` keeps an item out of the five-slot mobile tab bar.
 // `social: true` items only show when social publishing is enabled for the user.
@@ -96,8 +97,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         )}
       >
         <Link href="/" className={cn("flex h-14 items-center gap-2 font-display text-lg font-bold tracking-tight", compact ? "justify-center" : "px-2")}>
-          <Image src="/logo.png" alt="" width={24} height={24} className="size-6 dark:invert" priority />
-          {!compact && "SupoClip"}
+          <BrandMark className="size-6 text-sm" />
+          {!compact && SITE_NAME}
         </Link>
 
         <SidebarLink compact={compact} href="/" label={t("nav.newGeneration")} shortcut="N" className="mb-4 mt-1 bg-foreground text-background hover:bg-foreground/90 hover:text-background">
@@ -138,7 +139,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className={cn(user && "flex min-w-0 flex-1 flex-col", user && !immersive && "pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0")}>
         {user && !immersive ? <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur md:hidden">
           <Link href="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
-            <Image src="/logo.png" alt="" width={22} height={22} className="size-[22px] dark:invert" />SupoClip
+            <BrandMark className="size-[22px] text-xs" />{SITE_NAME}
           </Link>
           <div className="flex items-center gap-1">
             <Announcements key={user.id} userId={user.id} compact />
@@ -239,7 +240,7 @@ function UserRow({ compact, name, email }: { compact: boolean; name?: string | n
   };
   return (
     <div className={cn("flex items-center gap-2 rounded-lg", compact ? "flex-col" : "px-1.5 py-1")}>
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand to-amber-400 text-xs font-semibold text-white">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand to-[#b4ff5a] text-xs font-semibold text-brand-foreground">
         {initials(name, email)}
       </span>
       {!compact && (

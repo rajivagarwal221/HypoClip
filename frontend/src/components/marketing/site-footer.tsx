@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { catalogKey } from "@/i18n/config";
 import { getMarketingLink, getMarketingLinks } from "@/lib/marketing-links";
 import { APP_STORE_URL, COMPANY_NAME, GITHUB_URL } from "@/lib/site";
+import { BrandMark } from "@/components/brand-mark";
+import { SITE_NAME } from "@/lib/site";
 
 const linkClassName = "hover:text-foreground transition-colors";
 
@@ -46,9 +47,9 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div>
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="SupoClip" width={24} height={24} className="rounded-md dark:invert" />
+            <BrandMark className="size-6 text-sm" />
             <span className="text-sm font-semibold" style={{ fontFamily: "var(--font-syne), system-ui" }}>
-              SupoClip
+              {SITE_NAME}
             </span>
           </Link>
           <p className="mt-3 max-w-xs text-xs leading-6 text-muted-foreground">

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -51,6 +50,8 @@ import {
 } from "@/lib/marketing-links";
 import { APP_STORE_URL, GITHUB_URL, HOSTED_APP_URL, PRODUCT_HUNT_BADGE_URL, PRODUCT_HUNT_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/brand-mark";
+import { SITE_NAME } from "@/lib/site";
 
 type Translate = (key: string, values?: Record<string, string | number>) => string;
 
@@ -195,8 +196,8 @@ export default function LandingPage() {
           )}
         >
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="SupoClip" width={24} height={24} className="rounded-md dark:invert" />
-            <span className="font-display text-[17px] font-bold tracking-tight">SupoClip</span>
+            <BrandMark className="size-6 text-sm" />
+            <span className="font-display text-[17px] font-bold tracking-tight">{SITE_NAME}</span>
           </Link>
 
           <div className="hidden items-center gap-1 xl:flex">

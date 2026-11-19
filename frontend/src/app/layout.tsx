@@ -12,7 +12,7 @@ import { FeedbackButton } from "@/components/feedback-button";
 import { PostHogIdentity } from "@/components/posthog-identity";
 import { ThemeProvider } from "@/components/theme-provider";
 import { intlLocale } from "@/i18n/config";
-import { APP_STORE_ID, COMPANY_NAME, getSiteUrl } from "@/lib/site";
+import { APP_STORE_ID, COMPANY_NAME, getSiteUrl, SITE_NAME } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,9 +47,9 @@ export async function generateMetadata(): Promise<Metadata> {
   },
   description: t("description"),
   metadataBase: new URL(getSiteUrl()),
-  applicationName: "SupoClip",
-  authors: [{ name: "SupoClip Team", url: getSiteUrl() }],
-  creator: "SupoClip Team",
+  applicationName: SITE_NAME,
+  authors: [{ name: `${SITE_NAME} Team`, url: getSiteUrl() }],
+  creator: `${SITE_NAME} Team`,
   publisher: COMPANY_NAME,
   category: t("category"),
   icons: {
@@ -61,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: t("title"),
     description: t("openGraphDescription"),
-    siteName: "SupoClip",
+    siteName: SITE_NAME,
     type: "website",
   },
   twitter: {
